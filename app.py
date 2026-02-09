@@ -80,7 +80,7 @@ if st.session_state.page == "landing":
     st.markdown("#### 💡 Stop launching in silence. Get the attention you deserve.")
     
     # CTA SECTION
-    st.info("🔥 **Launch Special:** Lifetime Access for just **$9**")
+    st.info("🔥 **Launch Special:** Lifetime Access for just **$5**")
     
     c1, c2 = st.columns([1, 1])
     with c1:
