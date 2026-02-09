@@ -131,7 +131,7 @@ elif st.session_state.page == "tool":
     if submitted and product_name and key_features:
         with st.spinner("Consulting the PR Gods..."):
             try:
-                model = genai.GenerativeModel('gemini-1.5-flash')
+                model = genai.GenerativeModel('gemini-2.5-flash')
                 
                 prompt = f"""
                 Act as a world-class PR Specialist. 
