@@ -3,12 +3,10 @@ import google.generativeai as genai
 import time
 
 # --- CONFIGURATION & SECRETS ---
-# You need to set these in Streamlit Cloud > Advanced Settings > Secrets
-# If running locally, create a .streamlit/secrets.toml file
 try:
     GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
     ACCESS_CODE = st.secrets["ACCESS_CODE"]
-    WHOP_URL = st.secrets["WHOP_URL"] # Your Whop Checkout Link
+    WHOP_URL = st.secrets["WHOP_URL"]
 except:
     st.error("Secrets not found! Please set GOOGLE_API_KEY, ACCESS_CODE, and WHOP_URL in Streamlit secrets.")
     st.stop()
@@ -26,9 +24,10 @@ st.set_page_config(
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 if "page" not in st.session_state:
-    st.session_state.page = "landing" # Options: landing, login, tool
+    st.session_state.page = "landing" 
 
-# --- NAVIGATION FUNCTIONS ---
+# --- NAVIGATION FUNCTIONS (FIXED) ---
+# We removed st.rerun() from here because Streamlit auto-runs after clicks
 def go_to_login():
     st.session_state.page = "login"
 
@@ -39,16 +38,13 @@ def verify_code():
     if st.session_state.user_code == ACCESS_CODE:
         st.session_state.authenticated = True
         st.session_state.page = "tool"
-        st.success("Access Granted! Redirecting...")
-        time.sleep(1)
-        st.rerun()
+        st.success("Access Granted! Loading...")
     else:
         st.error("❌ Invalid Code. Please check your Whop receipt.")
 
 def logout():
     st.session_state.authenticated = False
     st.session_state.page = "landing"
-    st.rerun()
 
 # --- VIEW 1: LANDING PAGE ---
 if st.session_state.page == "landing":
@@ -84,10 +80,8 @@ if st.session_state.page == "landing":
     
     c1, c2 = st.columns([1, 1])
     with c1:
-        # This link button goes straight to payment
         st.link_button("👉 Get Instant Access ($5)", WHOP_URL, type="primary", use_container_width=True)
     with c2:
-        # This button goes to login view
         st.button("🔑 Already have a code? Login", on_click=go_to_login, use_container_width=True)
 
     st.markdown("---")
@@ -112,7 +106,6 @@ elif st.session_state.page == "tool":
         st.session_state.page = "landing"
         st.rerun()
 
-    # Sidebar for logout
     with st.sidebar:
         st.write("Logged in.")
         st.button("Log out", on_click=logout)
@@ -131,7 +124,7 @@ elif st.session_state.page == "tool":
     if submitted and product_name and key_features:
         with st.spinner("Consulting the PR Gods..."):
             try:
-                model = genai.GenerativeModel('gemini-2.5-flash')
+                model = genai.GenerativeModel('gemini-1.5-flash')
                 
                 prompt = f"""
                 Act as a world-class PR Specialist. 
