@@ -85,7 +85,7 @@ if st.session_state.page == "landing":
     c1, c2 = st.columns([1, 1])
     with c1:
         # This link button goes straight to payment
-        st.link_button("👉 Get Instant Access ($9)", WHOP_URL, type="primary", use_container_width=True)
+        st.link_button("👉 Get Instant Access ($5)", WHOP_URL, type="primary", use_container_width=True)
     with c2:
         # This button goes to login view
         st.button("🔑 Already have a code? Login", on_click=go_to_login, use_container_width=True)
